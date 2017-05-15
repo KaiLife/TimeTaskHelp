@@ -47,6 +47,7 @@ public class TimeTaskHelp extends android.os.Handler {
         stopTime();
         isRun = true;
         this.plusTime = plusTime * 1000;
+        this.interval = 1000;
         this.timeType = timeType;
         this.timeRunType = TimeRunType.TIME_RUN_COUNT_DOWN;
         sendEmptyMessage(WHAT);
@@ -106,6 +107,7 @@ public class TimeTaskHelp extends android.os.Handler {
         isRun = true;
         this.plusTime = 0;
         this.totalTime = totalTime * 1000;
+        this.interval = 1000;
         this.timeType = timeType;
         this.timeRunType = TimeRunType.TIME_RUN_HAVE_END;
         sendEmptyMessage(WHAT);
@@ -119,16 +121,6 @@ public class TimeTaskHelp extends android.os.Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        switch (timeRunType) {
-            case TIME_RUN_COUNT_DOWN:
-                plusTime -= 1000;
-                break;
-
-            default:
-                plusTime += interval;
-                break;
-        }
-
         String formatTime = null;
         switch (timeType) {
             case TIME_TYPE_HMS:
@@ -143,7 +135,6 @@ public class TimeTaskHelp extends android.os.Handler {
                 formatTime = TimeUtils.getSecond(plusTime);
                 break;
         }
-
         switch (timeRunType) {
             case TIME_RUN_COUNT_DOWN:
                 if (plusTime < 1) {
@@ -163,6 +154,16 @@ public class TimeTaskHelp extends android.os.Handler {
                 break;
         }
         changeTime(formatTime);
+
+        switch (timeRunType) {
+            case TIME_RUN_COUNT_DOWN:
+                plusTime -= this.interval;
+                break;
+
+            default:
+                plusTime += this.interval;
+                break;
+        }
     }
 
     /**
