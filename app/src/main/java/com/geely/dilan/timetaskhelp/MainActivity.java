@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_count_down).setOnClickListener(this);
         findViewById(R.id.btn_time_end).setOnClickListener(this);
         findViewById(R.id.btn_time_no_end).setOnClickListener(this);
+        findViewById(R.id.btn_time_no_end_5s).setOnClickListener(this);
 
         timeTaskHelp = new TimeTaskHelp();
         timeTaskHelp.setOnTimeChangeListener(this);
@@ -44,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_time_no_end:
                 timeTaskHelp.startTimeNoEnd(80);
+                break;
+
+            case R.id.btn_time_no_end_5s:
+                timeTaskHelp.startTimeNoEnd(0, 5);
                 break;
 
             default:

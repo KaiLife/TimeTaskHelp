@@ -19,6 +19,7 @@ public class TimeTaskHelp extends android.os.Handler {
     private TimeFormatType timeType = TimeFormatType.TIME_TYPE_HMS;
     private long plusTime;//提车剩余时间
     private long totalTime;//计时总时长
+    private long interval = 1000;//间隔
     private OnTimeChangeListener onTimeChangeListener;
     private static final int WHAT = 0x1001;
 
@@ -57,19 +58,29 @@ public class TimeTaskHelp extends android.os.Handler {
      * @param startTime
      */
     public void startTimeNoEnd(long startTime) {
-        startTimeNoEnd(startTime, TimeFormatType.TIME_TYPE_HMS);
+        startTimeNoEnd(startTime, 1, TimeFormatType.TIME_TYPE_HMS);
+    }
+
+    /**
+     * @param startTime
+     * @param interval
+     */
+    public void startTimeNoEnd(long startTime, long interval) {
+        startTimeNoEnd(startTime, interval, TimeFormatType.TIME_TYPE_HMS);
     }
 
     /**
      * 开始计时
      *
      * @param startTime
+     * @param interval
      * @param timeType
      */
-    public void startTimeNoEnd(long startTime, TimeFormatType timeType) {
+    public void startTimeNoEnd(long startTime, long interval, TimeFormatType timeType) {
         stopTime();
         isRun = true;
         this.plusTime = startTime * 1000;
+        this.interval = interval * 1000;
         this.timeType = timeType;
         this.timeRunType = TimeRunType.TIME_RUN_NO_END;
         sendEmptyMessage(WHAT);
@@ -114,7 +125,7 @@ public class TimeTaskHelp extends android.os.Handler {
                 break;
 
             default:
-                plusTime += 1000;
+                plusTime += interval;
                 break;
         }
 
@@ -162,7 +173,7 @@ public class TimeTaskHelp extends android.os.Handler {
     public void changeTime(String formatTime) {
         if (onTimeChangeListener != null) {
             onTimeChangeListener.onTimeChange(formatTime);
-            sendEmptyMessageDelayed(WHAT, 1000);
+            sendEmptyMessageDelayed(WHAT, interval);
         }
     }
 
